@@ -1,0 +1,25 @@
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+ // Sort the balloons by the end position of the array
+        Arrays.sort(points,(p1,p2) ->Integer.compare(p1[1],p2[1]));
+      // Initialize the number of arrows needed to 1
+        int arrow=1;
+        
+        // Set the index of the previously burst balloon
+          int x=points[0][1];
+          
+          //Iterating  through all balloons
+        for(int i=1;i<points.length;i++){
+        
+        // If the start position of the current balloon is after the end position of the arrow that burst the previous balloon,
+        // then a new arrow is needed to burst the current balloon
+            if(x<points[i][0]){
+                arrow++;
+                
+         // Update the index of the previously burst balloon
+                x=points[i][1];
+            }
+        }
+        return arrow;
+    }
+}
