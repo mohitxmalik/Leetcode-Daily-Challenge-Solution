@@ -1,0 +1,25 @@
+class Solution {
+    public int minFlipsMonoIncr(String s) {
+        
+        int ZeroToOne=0; 
+        int oneCount=0;
+        int i=0;
+while(i<s.length() && s.charAt(i)=='0'){
+    i++;
+}
+        for(;i<s.length();i++){
+            char c=s.charAt(i);
+            if(c=='0'){
+                ZeroToOne++;
+            }
+            else{
+                oneCount++;
+            }
+            if(ZeroToOne>oneCount){
+                ZeroToOne=oneCount;
+            }
+        }
+        
+        return ZeroToOne;
+    }
+}
