@@ -1,0 +1,42 @@
+class Solution {
+
+    public int helper (String s1,String s2,int dp[][]){
+         int m=s1.length();
+       int n=s2.length();
+        if(dp[m][n]!=-1){
+            return dp[m][n];
+        }
+        if(m==0){
+            dp[m][n]=n;
+            return dp[m][n];
+        }
+        if(n==0){
+            dp[m][n]=m;
+            return dp[m][n];
+        }
+            if(s1.charAt(0)==s2.charAt(0)){
+               dp[m][n]= helper(s1.substring(1),s2.substring(1),dp);
+            }else{
+  //Deleting element in s1
+        int option1=helper(s1,s2.substring(1),dp);
+        //Inserting element in s2
+        int option2=helper(s1.substring(1),s2,dp);
+        //Changing value of element
+        int option3=helper(s1.substring(1),s2.substring(1),dp);
+
+       dp[m][n]= 1+Math.min(option1,Math.min(option2,option3));
+            }
+            return dp[m][n];
+    }
+    public int minDistance(String s1, String s2) {
+       int m=s1.length();
+       int n=s2.length();
+       int dp[][]=new int[m+1][n+1];
+       for(int i=0;i<=m;i++){
+           for(int j=0;j<=n;j++){
+               dp[i][j]=-1;
+           }
+       }
+       return helper(s1,s2,dp);
+    }
+}
