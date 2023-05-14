@@ -1,0 +1,31 @@
+class Solution {
+    public int maxScore(int[] nums) {
+        int length = nums.length, operations = length / 2;
+        int size = 1 << length;
+        int dp[] = new int[size];
+        for (int mask = 0; mask < size; mask++) {
+            int iThOperation = Integer.bitCount(mask);
+            if ((iThOperation & 1) != 0) continue;
+            for (int x = 0; x < length; x++) {
+                if (((mask & (1 << x)) != 0)) continue;
+                for (int y = x + 1; y < length; y++) {
+                    if (((mask & (1 << y)) != 0)) continue;
+                    int newMask = mask | (1 << x) | (1 << y);
+                    int gcd = gcd(nums[x], nums[y]);
+                    int score = gcd * ((iThOperation >> 1) + 1);
+                    dp[newMask] = Math.max(dp[mask] + score, dp[newMask]);
+                }
+            }
+        }
+        return dp[size - 1];
+    }
+
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+}
