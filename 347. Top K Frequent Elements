@@ -1,0 +1,30 @@
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> hMap = new HashMap<>();
+        for(int no: nums){
+            hMap.put(no, hMap.getOrDefault(no, 0)+1);
+        }
+        
+        TreeMap<Integer, ArrayList<Integer>> mapToNum = new TreeMap<>();
+        for(int key: hMap.keySet()){
+            ArrayList<Integer> curr = mapToNum.getOrDefault(hMap.get(key), new ArrayList<Integer>());
+            curr.add(key);
+            mapToNum.put(hMap.get(key), curr);
+        }
+        
+        int counter = 0;
+        int[] ans = new int[k];
+        for(int key: mapToNum.descendingKeySet()){
+            for(int ele: mapToNum.get(key)){
+                if(counter == k){
+                    break;
+                }
+
+                ans[counter]= ele;
+                counter++;
+            }
+        }
+
+        return ans;
+    }
+}
