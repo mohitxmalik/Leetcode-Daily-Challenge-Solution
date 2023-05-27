@@ -1,0 +1,23 @@
+class Solution {
+    public String stoneGameIII(int[] stoneValue) {
+        int[] dp = new int[stoneValue.length];
+        Arrays.fill(dp , -999123);
+        int ans = getMax(0 , stoneValue , dp);
+        if(ans > 0) return "Alice";
+        else if(ans < 0) return "Bob";
+        return "Tie";
+    }
+    
+    private int getMax(int i , int[] arr , int[] dp){
+        if(i >= arr.length) return 0;
+        int max = Integer.MIN_VALUE;
+        int count = 0;
+        if(dp[i] != -999123) return dp[i];
+        for(int ptr = i ; ptr < i + 3  && ptr < arr.length ; ptr++){
+            count += arr[ptr];
+            max = Math.max(count - getMax(ptr + 1 , arr , dp) , max);
+        }
+        return dp[i] = max;
+    }
+   
+}
