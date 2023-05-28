@@ -1,0 +1,51 @@
+class Solution {
+    private int minCostHelp(int i, int j, int dp[][], int cuts[]) {
+        if (i > j) return 0;
+        if (dp[i][j] != -1) return dp[i][j];
+        int mini = Integer.MAX_VALUE;
+        for (int k = i; k <= j; k++) {
+            mini = Math.min(mini,
+                    cuts[j + 1] - cuts[i - 1] + minCostHelp(i, k - 1, dp, cuts) + minCostHelp(k + 1, j, dp, cuts));
+        }
+        return dp[i][j] = mini;
+    }
+
+
+    // TOP DOWN 
+    public int minCost1(int len, int[] cuts) {
+        int n = cuts.length, tmp[] = new int[n + 2];
+        for (int i = 0; i < n; i++) tmp[i] = cuts[i];
+        tmp[n] = 0;
+        tmp[n + 1] = len;
+        Arrays.sort(tmp);
+
+        n = tmp.length;
+        int dp[][] = new int[n][n];
+        for (int[] row : dp) Arrays.fill(row, -1);
+        return minCostHelp(1, n - 2, dp, tmp);
+    }
+
+
+    // BOTTOM UP
+    public int minCost(int len, int[] cuts) {
+        int n = cuts.length, tmp[] = new int[n + 2];
+        for (int i = 0; i < n; i++) tmp[i] = cuts[i];
+        tmp[n] = 0;
+        tmp[n + 1] = len;
+        Arrays.sort(tmp);
+
+        n = tmp.length;
+        int dp[][] = new int[n + 1][n + 1];
+
+        for (int i = n - 2; i >= 1; i--) {
+            for (int j = i; j <= n-2 ; j++) {
+                int mini = Integer.MAX_VALUE;
+                for (int k = i; k <= j; k++) {
+                    mini = Math.min(mini, tmp[j + 1] - tmp[i - 1] + dp[i][k - 1] + dp[k + 1][j]);
+                }
+                dp[i][j] = mini;
+            }
+        }
+        return dp[1][n - 2];
+    }
+}
