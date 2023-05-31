@@ -1,0 +1,54 @@
+class UndergroundSystem {
+
+    // start to end to pair of sum and count
+    private Map<String, Map<String, Pair<Integer, Integer>>> startToEndToPairOfSumAndCount;
+
+    // checkin map --> (id to pair of start and startTime)
+    private Map<Integer, Pair<String, Integer>> idToStartToStartTime;
+    public UndergroundSystem() {    
+        startToEndToPairOfSumAndCount = new HashMap<>();
+        idToStartToStartTime = new HashMap<>();
+    }
+    
+    public void checkIn(int id, String startStation, int t) {
+        idToStartToStartTime.put(id, new Pair<>(startStation, t));
+    }
+    
+    public void checkOut(int id, String endStation, int endTime) {
+        Pair<String, Integer> startAndStartTime = idToStartToStartTime.get(id);
+        String startStation = startAndStartTime.getKey();
+        Integer startTime = startAndStartTime.getValue();
+        int duration = endTime - startTime;
+
+        // if the start station is not present in the map
+        if(!startToEndToPairOfSumAndCount.containsKey(startStation)){
+            startToEndToPairOfSumAndCount.put(startStation, new HashMap<>());
+        }
+        int existSum = 0;
+        int existCount = 0;
+        // if the map contains both start and end station
+        if(startToEndToPairOfSumAndCount.get(startStation).containsKey(endStation)){
+            Pair<Integer, Integer> existingSumCount = startToEndToPairOfSumAndCount.get(startStation).get(endStation);
+            existSum = existingSumCount.getKey();
+            existCount = existingSumCount.getValue();
+        }
+        Pair<Integer, Integer> newSumCount = new Pair<>(existSum + duration, existCount + 1);
+
+        // if the map contains the start station but does not contains the end station then we add the end station and update the sum and count
+        startToEndToPairOfSumAndCount.get(startStation).put(endStation, newSumCount);
+        idToStartToStartTime.remove(id);
+    }
+    
+    public double getAverageTime(String startStation, String endStation) {
+        Pair<Integer, Integer> result = startToEndToPairOfSumAndCount.get(startStation).get(endStation);
+        return (double)result.getKey() / result.getValue();
+    }
+}
+
+/**
+ * Your UndergroundSystem object will be instantiated and called as such:
+ * UndergroundSystem obj = new UndergroundSystem();
+ * obj.checkIn(id,stationName,t);
+ * obj.checkOut(id,stationName,t);
+ * double param_3 = obj.getAverageTime(startStation,endStation);
+ */
